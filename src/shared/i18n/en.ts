@@ -229,6 +229,12 @@ export const en = {
   'tray.nextPrayer': 'Next: {prayer} at {time}',
   'tray.exit': 'Exit',
 
+  'fullscreen.enter': 'Full screen (F11)',
+  'fullscreen.exit': 'Exit full screen',
+  'fullscreen.hint': 'Press Esc or F11 to exit',
+  'fullscreen.nextPrayer': '{prayer} · {time} · in {countdown}',
+  'fullscreen.focus': '{phase} · {time}',
+
   'widget.openApp': 'Open Daywell',
   'widget.hide': 'Hide widget',
   'widget.resize': 'Drag to resize',

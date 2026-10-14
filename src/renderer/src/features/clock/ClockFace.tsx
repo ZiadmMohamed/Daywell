@@ -1,4 +1,4 @@
-import { memo, type CSSProperties } from 'react'
+import { memo, type CSSProperties, type ReactNode } from 'react'
 import type { Language } from '@shared/i18n'
 import { formatClock, formatLongDate, getClockParts, type TimeFormat } from '@shared/time/format'
 import type { ClockSettings } from '@shared/validation/settings'
@@ -12,7 +12,9 @@ interface ClockFaceProps {
   timeFormat: TimeFormat
   language: Language
   showDate: boolean
-  variant: 'stage' | 'widget'
+  variant: 'stage' | 'widget' | 'fullscreen'
+  /** Extra content laid over the face (e.g. the full-screen status line); inherits the clock colour. */
+  footer?: ReactNode
 }
 
 const FONT_FAMILIES: Record<Exclude<ClockSettings['font'], 'theme'>, string> = {
@@ -24,7 +26,7 @@ const FONT_FAMILIES: Record<Exclude<ClockSettings['font'], 'theme'>, string> = {
 }
 
 function faceStyle(clock: ClockSettings, variant: ClockFaceProps['variant']): CSSProperties {
-  const style: Record<string, string | number> = { '--clock-scale': variant === 'stage' ? clock.scale : 1 }
+  const style: Record<string, string | number> = { '--clock-scale': variant === 'widget' ? 1 : clock.scale }
   if (clock.font !== 'theme') style['--clock-font'] = FONT_FAMILIES[clock.font]
   if (clock.textColor) style['--clock-color'] = clock.textColor
   if (clock.background === 'solid') style.background = clock.backgroundColor
@@ -35,7 +37,7 @@ function faceStyle(clock: ClockSettings, variant: ClockFaceProps['variant']): CS
 }
 
 /** Renders the time in one of the built-in designs. Purely presentational. */
-export const ClockFace = memo(function ClockFace({ now, clock, timeFormat, language, showDate, variant }: ClockFaceProps) {
+export const ClockFace = memo(function ClockFace({ now, clock, timeFormat, language, showDate, variant, footer }: ClockFaceProps) {
   const date = new Date(now)
   const parts = getClockParts(date, timeFormat)
   const useThemeBackground = clock.background === 'theme' || (clock.background === 'image' && !clock.backgroundImage)
@@ -80,6 +82,7 @@ export const ClockFace = memo(function ClockFace({ now, clock, timeFormat, langu
         </time>
         {showDate && <div className="clock__date">{formatLongDate(date, language)}</div>}
       </div>
+      {footer}
     </div>
   )
 })

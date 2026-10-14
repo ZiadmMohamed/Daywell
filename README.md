@@ -5,6 +5,7 @@ A calm desktop companion for Windows 10 and 11: a beautiful clock with a desktop
 ## Features
 
 - **Clock** — five distinct designs (Minimal, Flip, Retro, Neon, Nature), 12/24-hour time, optional seconds and date, custom font, text colour, solid or image background, adjustable size.
+- **Full-screen clock** — press F11 (or the button on the clock) for an immersive full-screen clock with a quiet next-prayer and focus line; controls and the cursor hide when the mouse rests. Esc or F11 exits.
 - **Desktop widget** — a frameless, transparent clock that stays on the desktop: drag to move, drag the corner grip to resize, optional always-on-top, adjustable opacity, optional click-through. It never takes keyboard focus and remembers its position, size and visibility.
 - **Focus** — Pomodoro timer (25/5/15, long break after 4 by default; all configurable), start/pause/resume/reset/skip, optional auto-start, sound and notifications, today's sessions and focus time.
 - **Hydration** — daily goal, configurable quick-add amounts plus custom amounts, today's entries, 7-day history, reminders with interval, quiet hours and pause.
