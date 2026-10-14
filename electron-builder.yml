@@ -1,0 +1,34 @@
+appId: com.daywell.app
+productName: Daywell
+copyright: Copyright © 2026 Daywell
+directories:
+  buildResources: build
+  output: dist
+files:
+  - out/**
+  - resources/**
+  - package.json
+  - '!out/.tsc-*/**'
+  - '!**/*.map'
+asarUnpack:
+  - resources/**
+# No native modules: SQLite comes from Electron's built-in node:sqlite.
+npmRebuild: false
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: build/icon.ico
+  executableName: Daywell
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Daywell
+  uninstallDisplayName: Daywell
+  # User data (settings, history) lives in %APPDATA%\Daywell and is kept on
+  # uninstall so a reinstall picks up where the user left off.
+  deleteAppDataOnUninstall: false
+  artifactName: Daywell-Setup-${version}.${ext}

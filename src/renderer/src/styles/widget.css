@@ -1,0 +1,76 @@
+html.is-widget,
+html.is-widget body {
+  background: transparent;
+}
+
+.widget {
+  position: relative;
+  height: 100%;
+  padding: 2px;
+  -webkit-app-region: drag;
+}
+
+.widget .clock {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.widget__toolbar {
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 8px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition:
+    opacity var(--duration) var(--ease-out),
+    transform var(--duration) var(--ease-out);
+  -webkit-app-region: no-drag;
+  z-index: 5;
+}
+
+.widget:hover .widget__toolbar,
+.widget__toolbar:focus-within {
+  opacity: 1;
+  transform: none;
+}
+
+.widget__button {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: rgba(10, 12, 14, 0.55);
+  color: #f1f3f5;
+  -webkit-app-region: no-drag;
+}
+
+.widget__button:hover {
+  background: rgba(10, 12, 14, 0.8);
+}
+
+.widget__grip {
+  position: absolute;
+  /* Physically bottom-right in every language: the window grows from its top-left corner. */
+  bottom: 4px;
+  right: 4px;
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  color: rgba(241, 243, 245, 0.75);
+  background: rgba(10, 12, 14, 0.45);
+  cursor: nwse-resize;
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease-out);
+  -webkit-app-region: no-drag;
+  touch-action: none;
+  z-index: 5;
+}
+
+.widget:hover .widget__grip {
+  opacity: 1;
+}

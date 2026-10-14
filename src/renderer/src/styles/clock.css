@@ -1,0 +1,378 @@
+/*
+ * Clock designs. Each theme defines its own typography, palette and treatment;
+ * user overrides arrive as --clock-font / --clock-color / inline backgrounds.
+ * Sizes use container query units so a face fills whatever box it is given.
+ */
+.clock {
+  --clock-font: var(--theme-font);
+  --clock-color: var(--theme-color);
+  --fit-w: 22cqw;
+  --fit-h: 46cqh;
+  --time-size: calc(var(--clock-scale, 1) * min(var(--fit-w), var(--fit-h)));
+  position: relative;
+  container-type: size;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  color: var(--clock-color);
+  background-size: cover;
+  background-position: center;
+  transition: background-color var(--duration-slow) var(--ease-out);
+}
+
+.clock__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: calc(var(--time-size) * 0.12);
+  max-width: 100%;
+}
+
+.clock__time {
+  display: flex;
+  align-items: baseline;
+  gap: calc(var(--time-size) * 0.12);
+  font-family: var(--clock-font);
+  font-size: var(--time-size);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.clock__digits {
+  display: inline-flex;
+  align-items: baseline;
+  gap: calc(var(--time-size) * 0.08);
+}
+
+.clock__sep {
+  display: inline-block;
+  margin: 0 0.02em;
+  transform: translateY(-0.06em);
+}
+
+.clock__seconds {
+  font-size: 0.34em;
+  opacity: 0.6;
+  min-width: 1.3em;
+}
+
+.clock__period {
+  font-size: 0.2em;
+  letter-spacing: 0.08em;
+  opacity: 0.65;
+  font-family: var(--font-ui);
+  font-weight: 500;
+}
+
+.clock__date {
+  font-family: var(--date-font, var(--font-ui));
+  font-size: max(12px, calc(var(--time-size) * 0.13));
+  letter-spacing: 0.02em;
+  opacity: 0.72;
+  text-align: center;
+}
+
+/* Photos: default to white text with a soft shadow unless the user picked a color. */
+.clock.clock--bg-image {
+  --theme-color: #fff;
+}
+.clock--bg-image .clock__time,
+.clock--bg-image .clock__date {
+  color: var(--clock-color);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+}
+
+/* ---------- Minimal ---------- */
+.clock--minimal {
+  --theme-font: 'Inter', var(--font-ui);
+  --theme-color: var(--text);
+}
+.clock--minimal.clock--themed-bg {
+  background: var(--surface);
+  border: 1px solid var(--border);
+}
+.clock--minimal .clock__time {
+  font-weight: 200;
+  letter-spacing: -0.045em;
+}
+.clock--minimal .clock__seconds {
+  letter-spacing: -0.02em;
+  font-weight: 300;
+}
+.clock--minimal .clock__date {
+  font-weight: 400;
+  text-transform: none;
+}
+
+/* ---------- Flip ---------- */
+.clock--flip {
+  --theme-font: 'Space Grotesk', var(--font-ui);
+  --theme-color: #f3efe6;
+  --flip-card: #23262c;
+  --flip-card-bottom: #1d2025;
+  --fit-w: 24cqw;
+  --fit-h: 44cqh;
+}
+.clock--flip.clock--themed-bg {
+  background: radial-gradient(120% 90% at 50% 0%, #1d2026 0%, #111316 70%);
+}
+.clock--flip .clock__time {
+  font-weight: 700;
+  align-items: center;
+}
+.clock--flip .clock__digits {
+  align-items: center;
+  gap: calc(var(--time-size) * 0.1);
+}
+.flip-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: stretch;
+  gap: 0.1em;
+}
+.clock--flip .clock__period {
+  color: var(--clock-color);
+  font-size: 0.13em;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  padding-top: 0.4em;
+  padding-inline-start: 0.3em;
+  opacity: 0.55;
+}
+.clock--flip .flip-side .flip-card {
+  margin-top: auto;
+}
+.clock--flip .clock__date {
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: max(11px, calc(var(--time-size) * 0.1));
+}
+
+.flip-card {
+  --card-h: 1.36em;
+  position: relative;
+  display: inline-block;
+  width: 1.22em;
+  height: var(--card-h);
+  perspective: 5em;
+  color: var(--clock-color);
+}
+.flip-card--small {
+  font-size: 0.4em;
+}
+.flip-card__half {
+  position: absolute;
+  inset-inline: 0;
+  height: 50%;
+  overflow: hidden;
+  background: var(--flip-card);
+  backface-visibility: hidden;
+}
+/* Digits are drawn at 76% of the card's em so they sit inside the card with margins. */
+.flip-card__half > span {
+  display: block;
+  font-size: 0.76em;
+  height: calc(var(--card-h) / 0.76);
+  line-height: calc(var(--card-h) / 0.76);
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+.flip-card__half--top {
+  top: 0;
+  border-radius: 0.09em 0.09em 0 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+.flip-card__half--bottom {
+  bottom: 0;
+  border-radius: 0 0 0.09em 0.09em;
+  background: var(--flip-card-bottom);
+  box-shadow: 0 0.06em 0.12em rgba(0, 0, 0, 0.35);
+}
+.flip-card__half--bottom > span {
+  transform: translateY(-50%);
+}
+.flip-card::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: calc(50% - 0.012em);
+  height: 0.024em;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 3;
+}
+.flip-card__flaps {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.flip-card__flap-top {
+  transform-origin: bottom center;
+  animation: flip-top 260ms ease-in both;
+}
+.flip-card__flap-bottom {
+  transform-origin: top center;
+  animation: flip-bottom 260ms ease-out 260ms both;
+}
+@keyframes flip-top {
+  from {
+    transform: rotateX(0deg);
+  }
+  to {
+    transform: rotateX(-90deg);
+  }
+}
+@keyframes flip-bottom {
+  from {
+    transform: rotateX(90deg);
+  }
+  to {
+    transform: rotateX(0deg);
+  }
+}
+
+/* ---------- Retro ---------- */
+.clock--retro {
+  --theme-font: 'Playfair Display', Georgia, serif;
+  --theme-color: #f2d9a6;
+  --date-font: 'Playfair Display', Georgia, serif;
+  --fit-w: 21cqw;
+}
+.clock--retro.clock--themed-bg {
+  background:
+    radial-gradient(rgba(255, 236, 200, 0.05) 1px, transparent 1px) 0 0 / 4px 4px,
+    radial-gradient(120% 100% at 30% 10%, #4a301d 0%, #2b1b10 55%, #1c120b 100%);
+}
+.clock--retro.clock--themed-bg::before {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(242, 217, 166, 0.22);
+  border-radius: calc(var(--radius-xl) - 8px);
+  box-shadow: inset 0 0 0 4px rgba(242, 217, 166, 0.05);
+  pointer-events: none;
+}
+.clock--retro .clock__time {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-shadow: 0 0.03em 0 rgba(0, 0, 0, 0.35);
+}
+.clock--retro .clock__seconds {
+  font-style: italic;
+}
+.clock--retro .clock__period {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+.clock--retro .clock__date {
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Neon ---------- */
+.clock--neon {
+  --theme-font: 'Orbitron', var(--font-ui);
+  --theme-color: #8ff4ff;
+  --fit-w: 17cqw;
+  --fit-h: 40cqh;
+}
+.clock--neon.clock--themed-bg {
+  background:
+    radial-gradient(60% 50% at 50% 55%, rgba(60, 220, 255, 0.07) 0%, transparent 70%),
+    linear-gradient(180deg, #080a12 0%, #05060b 100%);
+}
+.clock--neon .clock__time {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-shadow:
+    0 0 0.04em color-mix(in srgb, var(--clock-color) 90%, transparent),
+    0 0 0.22em color-mix(in srgb, var(--clock-color) 35%, transparent);
+}
+.clock--neon .clock__seconds {
+  color: #ff7ad9;
+  opacity: 0.8;
+  text-shadow: 0 0 0.2em rgba(255, 122, 217, 0.5);
+}
+.clock--neon .clock__sep {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+.clock--neon .clock__date {
+  font-family: 'Orbitron', var(--font-ui);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: max(10px, calc(var(--time-size) * 0.085));
+  opacity: 0.6;
+}
+@keyframes neon-pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* ---------- Nature ---------- */
+.clock--nature {
+  --theme-font: 'Inter', var(--font-ui);
+  --theme-color: #1f3b2f;
+  --nature-sky-top: #b9d3c2;
+  --nature-sky-bottom: #efe4cb;
+  --nature-sun: rgba(255, 246, 222, 0.85);
+  --nature-hill-1: #8fb39a;
+  --nature-hill-2: #6c9479;
+  --nature-hill-3: #4c735c;
+}
+:root[data-theme='dark'] .clock--nature {
+  --theme-color: #eef3e8;
+  --nature-sky-top: #1d3330;
+  --nature-sky-bottom: #4d6656;
+  --nature-sun: rgba(240, 232, 200, 0.25);
+  --nature-hill-1: #2d4a3d;
+  --nature-hill-2: #233c31;
+  --nature-hill-3: #182c23;
+}
+.clock--nature.clock--themed-bg {
+  background: var(--nature-sky-bottom);
+}
+.nature-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.clock--nature .clock__inner {
+  transform: translateY(-12%);
+}
+.clock--nature .clock__time {
+  font-weight: 300;
+  letter-spacing: -0.03em;
+}
+
+/* ---------- Widget variant ---------- */
+.clock--widget {
+  --fit-w: 23cqw;
+  --fit-h: 52cqh;
+  border-radius: var(--radius-lg);
+}
+.clock--widget.clock--minimal.clock--themed-bg {
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+.clock--widget.clock--neon {
+  --fit-w: 18cqw;
+}
+.clock--widget.clock--flip {
+  --fit-w: 25cqw;
+}
+.clock--widget .clock__date {
+  font-size: max(11px, calc(var(--time-size) * 0.14));
+}
+.clock--widget.clock--retro.clock--themed-bg::before {
+  inset: 8px;
+}

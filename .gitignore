@@ -1,0 +1,14 @@
+node_modules/
+out/
+dist/
+release/
+*.log
+*.db
+*.db-*
+*.db.bak*
+.env
+.env.*
+.DS_Store
+Thumbs.db
+coverage/
+.vite/
