@@ -251,6 +251,8 @@ export class DaywellApp {
       log.info('Local date or timezone changed; refreshing')
       this.lastLocalDate = date
       this.lastOffset = offset
+      // Keep the handled-event log bounded even if Daywell runs for weeks without restarting.
+      this.repos.notificationLog.pruneBefore(now - NOTIFICATION_LOG_RETENTION_MS)
       this.publish('focus')
       this.publish('hydration')
     }

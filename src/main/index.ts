@@ -10,6 +10,13 @@ import { log } from './app/log'
 
 const APP_ID = 'com.daywell.app'
 
+// Development only: run against a separate data folder (and single-instance
+// lock), e.g. for tests that must not touch the real data or clash with an
+// installed copy that is running.
+if (!app.isPackaged && process.env['DAYWELL_USER_DATA']) {
+  app.setPath('userData', process.env['DAYWELL_USER_DATA'])
+}
+
 if (!app.requestSingleInstanceLock()) {
   app.quit()
 } else {

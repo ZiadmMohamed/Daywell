@@ -1,17 +1,19 @@
-const cache = new Map<string, boolean>()
+/**
+ * Only valid zones are cached: there are a few hundred of them, whereas invalid
+ * input (e.g. from IPC) is unbounded and must not grow the cache.
+ */
+const validZones = new Set<string>()
 
 export function isValidTimeZone(zone: string): boolean {
-  const known = cache.get(zone)
-  if (known !== undefined) return known
-  let valid: boolean
+  if (validZones.has(zone)) return true
+  if (zone.length === 0 || zone.length > 64) return false
   try {
     new Intl.DateTimeFormat('en-US', { timeZone: zone })
-    valid = zone.length > 0
   } catch {
-    valid = false
+    return false
   }
-  cache.set(zone, valid)
-  return valid
+  validZones.add(zone)
+  return true
 }
 
 export function systemTimeZone(): string {
