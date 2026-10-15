@@ -45,7 +45,8 @@ export class WidgetWindow {
 
   apply(settings: WidgetSettings): void {
     if (!settings.visible) {
-      this.browserWindow?.hide()
+      // Destroy rather than hide so a hidden widget costs no memory.
+      this.destroy()
       return
     }
     const window = this.browserWindow ?? this.create()

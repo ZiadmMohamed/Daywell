@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { Page } from '@shared/types/state'
+import { PAGES as PAGES_LIST, type Page } from '@shared/types/state'
 import { useDocumentLanguage } from '../hooks/useI18n'
 import { useDocumentTheme } from '../hooks/useTheme'
 import { playSound } from '../services/sound'
@@ -19,10 +19,16 @@ const PAGES: Record<Page, () => React.JSX.Element> = {
   settings: SettingsPage
 }
 
+/** The window is created on demand; the main process passes the screen to open in the URL hash. */
+function initialPage(): Page {
+  const requested = window.location.hash.slice(1)
+  return (PAGES_LIST as readonly string[]).includes(requested) ? (requested as Page) : 'clock'
+}
+
 export function App() {
   useDocumentTheme()
   useDocumentLanguage()
-  const [page, setPage] = useState<Page>('clock')
+  const [page, setPage] = useState<Page>(initialPage)
   const [fullscreen, setFullscreen] = useState(false)
 
   useEffect(

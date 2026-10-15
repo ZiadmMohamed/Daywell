@@ -1,4 +1,4 @@
-import { ipcMain, type IpcMainInvokeEvent } from 'electron'
+import { ipcMain, type IpcMainInvokeEvent, type WebContents } from 'electron'
 import { z } from 'zod'
 import { IPC } from '@shared/constants/ipc'
 import type { AppSlices, Page } from '@shared/types/state'
@@ -34,6 +34,7 @@ export interface IpcBackend {
   setWidgetVisible(visible: boolean): void
   resizeWidget(width: number, height: number): void
   pickAsset(kind: AssetKind): Promise<string | null>
+  soundFinished(sender: WebContents): void
 }
 
 /**
@@ -43,7 +44,7 @@ export interface IpcBackend {
 function handle<S extends z.ZodType>(
   channel: string,
   schema: S,
-  run: (input: z.infer<S>) => unknown
+  run: (input: z.infer<S>, sender: WebContents) => unknown
 ): void {
   ipcMain.handle(channel, async (event: IpcMainInvokeEvent, raw: unknown) => {
     const origin = event.senderFrame?.url ?? ''
@@ -56,7 +57,7 @@ function handle<S extends z.ZodType>(
       log.warn(`Rejected invalid IPC payload on ${channel}`)
       throw new Error('Invalid request')
     }
-    return run(parsed.data)
+    return run(parsed.data, event.sender)
   })
 }
 
@@ -74,4 +75,5 @@ export function registerIpc(backend: IpcBackend): void {
   handle(IPC.setWidgetVisible, setWidgetVisibleInput, (visible) => backend.setWidgetVisible(visible))
   handle(IPC.resizeWidget, resizeWidgetInput, ({ width, height }) => backend.resizeWidget(width, height))
   handle(IPC.pickAsset, pickAssetInput, (kind) => backend.pickAsset(kind))
+  handle(IPC.soundFinished, noInput, (_input, sender) => backend.soundFinished(sender))
 }

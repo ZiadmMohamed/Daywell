@@ -77,7 +77,7 @@ src/
 
 Key decisions:
 
-- **The main process owns all state.** Timers, reminders and persistence live there, so everything keeps working with all windows hidden. Renderers only display state slices pushed over IPC and send validated commands.
+- **The main process owns all state.** Timers, reminders and persistence live there, so everything keeps working with no windows open. Closing to the tray destroys the main window (and hiding the widget destroys it) to free their memory; reopening rebuilds them from that state. Renderers only display state slices pushed over IPC and send validated commands.
 - **Timers use timestamps, never tick counting.** A running focus phase stores its absolute end time; remaining time is `endsAt − now`. State is persisted on every transition, so suspension, throttling and restarts cannot drift it.
 - **One scheduler for every notification.** Features describe upcoming events as data with deterministic ids (for example `prayer:2026-10-14:asr:at`). A single timer wakes for the earliest one (at most once a minute otherwise), and a persistent log of handled ids makes duplicates impossible across re-plans, restarts and resumes.
 - **Missed-event policy.** After sleep or downtime, events more than 2 minutes old are recorded as missed and not shown — no flood of stale prayer or water alerts. The one exception: a focus session that ended while you were away is announced once. A long sleep never chains several Pomodoro sessions in the past.

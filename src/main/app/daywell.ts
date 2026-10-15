@@ -22,6 +22,7 @@ import { applyMainWindowTheme, createMainWindow } from '../windows/mainWindow'
 import { WidgetWindow } from '../windows/widgetWindow'
 import { pickAsset, pruneAssets } from './assets'
 import { log } from './log'
+import { SoundPlayer } from './soundPlayer'
 
 const TRAY_HINT_KEY = 'trayHintShown'
 
@@ -41,6 +42,7 @@ export class DaywellApp {
   private readonly scheduler: Scheduler
   private readonly notifier: Notifier
   private readonly widget: WidgetWindow
+  private readonly sound: SoundPlayer
   private readonly appIcon: NativeImage
   private previousHydration: Settings['hydration']
   private mainWindow: BrowserWindow | null = null
@@ -66,6 +68,7 @@ export class DaywellApp {
     this.previousHydration = this.settings.get('hydration')
     this.prayer = new PrayerService(() => this.settings.get('prayer'), () => this.publish('prayer'))
     this.widget = new WidgetWindow(repos.state)
+    this.sound = new SoundPlayer(() => this.mainWindow)
     this.notifier = new Notifier(() => this.tray?.native ?? null, this.appIcon)
     this.scheduler = new Scheduler({
       now: () => Date.now(),
@@ -103,7 +106,8 @@ export class DaywellApp {
       setFullscreen: (on) => this.mainWindow?.setFullScreen(on),
       setWidgetVisible: (visible) => this.updateSettings('widget', { visible }),
       resizeWidget: (width, height) => this.widget.resize(width, height),
-      pickAsset: (kind) => pickAsset(kind, this.mainWindow)
+      pickAsset: (kind) => pickAsset(kind, this.mainWindow),
+      soundFinished: (sender) => this.sound.finished(sender)
     })
 
     this.settings.onChange((section, all) => this.onSettingsChanged(section, all))
@@ -121,7 +125,8 @@ export class DaywellApp {
       exit: () => this.quit()
     })
 
-    this.createMainWindow(startHidden)
+    // Started at login: stay in the tray without creating a window at all.
+    if (!startHidden) this.createMainWindow()
     this.widget.apply(this.settings.get('widget'))
     this.applyLoginItem()
 
@@ -138,7 +143,12 @@ export class DaywellApp {
   }
 
   showMain(page?: Page): void {
-    const window = this.mainWindow ?? this.createMainWindow(false)
+    if (!this.mainWindow) {
+      // A new window opens directly on the requested page and shows itself once painted.
+      this.createMainWindow(page)
+      return
+    }
+    const window = this.mainWindow
     if (window.isMinimized()) window.restore()
     window.show()
     window.focus()
@@ -157,24 +167,20 @@ export class DaywellApp {
   shutdown(): void {
     this.quitting = true
     this.scheduler.stop()
+    this.sound.close()
     this.widget.destroy()
     this.tray?.destroy()
   }
 
-  private createMainWindow(hidden: boolean): BrowserWindow {
-    const window = createMainWindow(this.settings.get('general').theme, this.appIcon)
-    window.once('ready-to-show', () => {
-      if (!hidden) window.show()
-    })
-    window.on('close', (event) => {
+  private createMainWindow(page?: Page): BrowserWindow {
+    const window = createMainWindow(this.settings.get('general').theme, this.appIcon, page)
+    window.once('ready-to-show', () => window.show())
+    window.on('close', () => {
       if (this.quitting) return
-      if (this.settings.get('general').minimizeToTray) {
-        event.preventDefault()
-        window.hide()
-        this.showTrayHintOnce()
-      } else {
-        this.quit()
-      }
+      // Closing to the tray destroys the window to free its memory (~70 MB);
+      // all state lives in the main process, so reopening restores it exactly.
+      if (this.settings.get('general').minimizeToTray) this.showTrayHintOnce()
+      else this.quit()
     })
     window.on('closed', () => {
       this.mainWindow = null
@@ -267,7 +273,7 @@ export class DaywellApp {
     // A short in-app chime marks the end of a focus phase even when its notification is turned off.
     const sound: SoundCue | null =
       event.payload.kind === 'focus-end' ? (settings.focus.soundEnabled ? { kind: 'chime' } : null) : content.sound
-    if (sound) this.mainWindow?.webContents.send(IPC.playSound, sound)
+    if (sound) this.sound.play(sound)
     if (!event.notify) return true
     return this.notifier.show({
       title: content.title,

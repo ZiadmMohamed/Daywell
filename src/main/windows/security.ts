@@ -16,11 +16,14 @@ export function secureWebPreferences(): WebPreferences {
   }
 }
 
-/** Loads one of the renderer pages, from the dev server during development. */
-export function loadPage(window: BrowserWindow, page: 'index' | 'widget'): Promise<void> {
+/**
+ * Loads one of the renderer pages, from the dev server during development.
+ * `hash` is passed to the page as its initial location hash (e.g. the screen to open).
+ */
+export function loadPage(window: BrowserWindow, page: 'index' | 'widget' | 'sound', hash?: string): Promise<void> {
   const devUrl = process.env['ELECTRON_RENDERER_URL']
-  if (!app.isPackaged && devUrl) return window.loadURL(`${devUrl}/${page}.html`)
-  return window.loadFile(join(__dirname, `../renderer/${page}.html`))
+  if (!app.isPackaged && devUrl) return window.loadURL(`${devUrl}/${page}.html${hash ? `#${hash}` : ''}`)
+  return window.loadFile(join(__dirname, `../renderer/${page}.html`), hash ? { hash } : undefined)
 }
 
 /** Is this URL one of our own renderer pages? */

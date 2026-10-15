@@ -1,5 +1,6 @@
 import { BrowserWindow, nativeTheme } from 'electron'
 import type { GeneralSettings } from '@shared/validation/settings'
+import type { Page } from '@shared/types/state'
 import { hardenWindow, loadPage, secureWebPreferences } from './security'
 
 const COLORS = {
@@ -11,7 +12,7 @@ export function resolveDark(theme: GeneralSettings['theme']): boolean {
   return theme === 'dark' || (theme === 'system' && nativeTheme.shouldUseDarkColors)
 }
 
-export function createMainWindow(theme: GeneralSettings['theme'], icon: Electron.NativeImage): BrowserWindow {
+export function createMainWindow(theme: GeneralSettings['theme'], icon: Electron.NativeImage, page?: Page): BrowserWindow {
   const palette = resolveDark(theme) ? COLORS.dark : COLORS.light
   const window = new BrowserWindow({
     width: 1080,
@@ -28,7 +29,7 @@ export function createMainWindow(theme: GeneralSettings['theme'], icon: Electron
   })
   hardenWindow(window)
   window.setMenu(null)
-  void loadPage(window, 'index')
+  void loadPage(window, 'index', page)
   return window
 }
 

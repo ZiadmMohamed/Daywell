@@ -72,11 +72,12 @@ Run through this on both Windows 10 and Windows 11, using the installed build (`
 
 ## Tray and background
 
-- [ ] Closing the window hides it to the tray (a one-time hint explains this); reminders keep working.
+- [ ] Closing the window sends Daywell to the tray (a one-time hint explains this); reminders keep working. In Task Manager the window's renderer process disappears, and reopening from the tray or a notification restores the same page and state.
 - [ ] The tray menu opens the app, toggles the widget, starts/pauses focus, logs water, shows the next prayer and exits.
 - [ ] With "Keep running in the tray" off, closing the window quits Daywell.
 - [ ] Launch at startup on: sign out and in, and Daywell starts hidden in the tray. Off: it does not start.
-- [ ] With all windows hidden, Task Manager shows Daywell near 0% CPU.
+- [ ] With the window closed to the tray, Task Manager shows Daywell near 0% CPU.
+- [ ] With the window closed, the focus chime still plays when a session ends (and the Athan, if enabled, at prayer time).
 
 ## Settings, theme and language
 

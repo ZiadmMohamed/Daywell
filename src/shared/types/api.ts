@@ -19,6 +19,8 @@ export interface DaywellApi {
   resizeWidget(width: number, height: number): Promise<void>
   /** Opens a native file picker; returns the stored asset name, or null if cancelled. */
   pickAsset(kind: AssetKind): Promise<string | null>
+  /** Sent by the background sound page when everything it was asked to play has finished. */
+  soundFinished(): Promise<void>
   onSlice<K extends SliceName>(listener: (name: K, value: AppSlices[K]) => void): () => void
   onNavigate(listener: (page: Page) => void): () => void
   onPlaySound(listener: (cue: SoundCue) => void): () => void

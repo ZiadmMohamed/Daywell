@@ -21,6 +21,7 @@ const api: DaywellApi = {
   setWidgetVisible: (visible) => ipcRenderer.invoke(IPC.setWidgetVisible, visible),
   resizeWidget: (width, height) => ipcRenderer.invoke(IPC.resizeWidget, { width, height }),
   pickAsset: (kind) => ipcRenderer.invoke(IPC.pickAsset, kind),
+  soundFinished: () => ipcRenderer.invoke(IPC.soundFinished),
   onSlice: (listener) => subscribe(IPC.sliceChanged, listener),
   onNavigate: (listener) => subscribe(IPC.navigate, listener),
   onPlaySound: (listener) => subscribe(IPC.playSound, listener)

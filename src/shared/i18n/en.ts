@@ -116,7 +116,7 @@ export const en = {
   'settings.launchAtStartup': 'Launch at startup',
   'settings.launchAtStartupHint': 'Start Daywell quietly in the tray when you sign in to Windows.',
   'settings.minimizeToTray': 'Keep running in the tray',
-  'settings.minimizeToTrayHint': 'Closing the window hides it; reminders keep working. Use Exit in the tray menu to quit.',
+  'settings.minimizeToTrayHint': 'Closing the window keeps Daywell in the tray, where reminders keep working. Use Exit in the tray menu to quit.',
   'settings.theme': 'Appearance',
   'settings.theme.system': 'System',
   'settings.theme.light': 'Light',

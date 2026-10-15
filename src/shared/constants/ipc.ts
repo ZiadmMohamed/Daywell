@@ -11,6 +11,7 @@ export const IPC = {
   setWidgetVisible: 'widget:set-visible',
   resizeWidget: 'widget:resize',
   pickAsset: 'assets:pick',
+  soundFinished: 'sound:finished',
   // main → renderer
   sliceChanged: 'state:slice-changed',
   navigate: 'app:navigate',
