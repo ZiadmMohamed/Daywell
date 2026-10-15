@@ -11,6 +11,9 @@ export interface DaywellApi {
   removeWater(id: number): Promise<void>
   pauseHydration(pause: number | 'tomorrow' | null): Promise<void>
   showMain(page?: Page): Promise<void>
+  /** Puts the main window into (or out of) full-screen clock mode. */
+  setFullscreen(on: boolean): Promise<void>
+  onFullscreenChange(listener: (on: boolean) => void): () => void
   setWidgetVisible(visible: boolean): Promise<void>
   /** Resizes the desktop widget (transparent windows cannot be resized natively). */
   resizeWidget(width: number, height: number): Promise<void>

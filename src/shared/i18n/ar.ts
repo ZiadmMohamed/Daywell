@@ -150,6 +150,11 @@ export const ar: Partial<Record<MessageKey, string>> = {
 
   'tray.open': 'فتح Daywell',
   'tray.exit': 'خروج',
+  'fullscreen.enter': 'ملء الشاشة (F11)',
+  'fullscreen.exit': 'الخروج من ملء الشاشة',
+  'fullscreen.hint': 'اضغط Esc أو F11 للخروج',
+  'fullscreen.nextPrayer': '{prayer} · {time} · بعد {countdown}',
+
   'widget.openApp': 'فتح Daywell',
   'widget.hide': 'إخفاء الساعة'
 }

@@ -100,6 +100,7 @@ export class DaywellApp {
         this.scheduler.wake()
       },
       showMain: (page) => this.showMain(page),
+      setFullscreen: (on) => this.mainWindow?.setFullScreen(on),
       setWidgetVisible: (visible) => this.updateSettings('widget', { visible }),
       resizeWidget: (width, height) => this.widget.resize(width, height),
       pickAsset: (kind) => pickAsset(kind, this.mainWindow)
@@ -177,6 +178,12 @@ export class DaywellApp {
     })
     window.on('closed', () => {
       this.mainWindow = null
+    })
+    // Keep the renderer in sync however full screen is entered or left (button, F11, Esc, OS).
+    window.on('enter-full-screen', () => window.webContents.send(IPC.fullscreenChanged, true))
+    window.on('leave-full-screen', () => window.webContents.send(IPC.fullscreenChanged, false))
+    window.on('hide', () => {
+      if (window.isFullScreen()) window.setFullScreen(false)
     })
     this.mainWindow = window
     return window

@@ -7,11 +7,13 @@ export const IPC = {
   removeWater: 'hydration:remove',
   pauseHydration: 'hydration:pause',
   showMain: 'window:show-main',
+  setFullscreen: 'window:set-fullscreen',
   setWidgetVisible: 'widget:set-visible',
   resizeWidget: 'widget:resize',
   pickAsset: 'assets:pick',
   // main → renderer
   sliceChanged: 'state:slice-changed',
   navigate: 'app:navigate',
+  fullscreenChanged: 'window:fullscreen-changed',
   playSound: 'app:play-sound'
 } as const

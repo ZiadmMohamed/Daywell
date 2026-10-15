@@ -22,3 +22,4 @@ export const resizeWidgetInput = z.object({
   width: z.number().int().min(180).max(1600),
   height: z.number().int().min(80).max(1000)
 })
+export const setFullscreenInput = z.boolean()

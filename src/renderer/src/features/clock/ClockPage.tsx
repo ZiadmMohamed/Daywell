@@ -1,8 +1,9 @@
-import { Droplets, Moon, Timer } from 'lucide-react'
+import { Droplets, Maximize2, Moon, Timer } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { formatCountdown } from '@shared/time/format'
 import type { Page } from '@shared/types/state'
 import { navigate } from '../../app/App'
+import { IconButton } from '../../components/Button'
 import { ProgressRing } from '../../components/Layout'
 import { useT } from '../../hooks/useI18n'
 import { useNow } from '../../hooks/useNow'
@@ -28,10 +29,17 @@ export function ClockPage() {
 }
 
 function ClockStage() {
+  const t = useT()
   const settings = useSettings()
   const now = useNow(settings.clock.showSeconds || settings.clock.theme === 'flip' ? 'second' : 'minute')
   return (
     <div className="clock-stage">
+      <IconButton
+        className="clock-stage__fullscreen"
+        label={t('fullscreen.enter')}
+        icon={<Maximize2 size={16} />}
+        onClick={() => void window.daywell.setFullscreen(true)}
+      />
       <ClockFace
         now={now}
         clock={settings.clock}

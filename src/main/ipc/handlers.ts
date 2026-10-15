@@ -9,6 +9,7 @@ import {
   pickAssetInput,
   removeWaterInput,
   resizeWidgetInput,
+  setFullscreenInput,
   setWidgetVisibleInput,
   showMainInput,
   updateSettingsInput,
@@ -29,6 +30,7 @@ export interface IpcBackend {
   removeWater(id: number): void
   pauseHydration(pause: number | 'tomorrow' | null): void
   showMain(page?: Page): void
+  setFullscreen(on: boolean): void
   setWidgetVisible(visible: boolean): void
   resizeWidget(width: number, height: number): void
   pickAsset(kind: AssetKind): Promise<string | null>
@@ -68,6 +70,7 @@ export function registerIpc(backend: IpcBackend): void {
   handle(IPC.removeWater, removeWaterInput, (id) => backend.removeWater(id))
   handle(IPC.pauseHydration, pauseHydrationInput, (pause) => backend.pauseHydration(pause))
   handle(IPC.showMain, showMainInput, (page) => backend.showMain(page as Page | undefined))
+  handle(IPC.setFullscreen, setFullscreenInput, (on) => backend.setFullscreen(on))
   handle(IPC.setWidgetVisible, setWidgetVisibleInput, (visible) => backend.setWidgetVisible(visible))
   handle(IPC.resizeWidget, resizeWidgetInput, ({ width, height }) => backend.resizeWidget(width, height))
   handle(IPC.pickAsset, pickAssetInput, (kind) => backend.pickAsset(kind))

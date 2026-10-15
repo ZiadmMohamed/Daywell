@@ -192,8 +192,92 @@
 }
 
 .clock-stage {
+  position: relative;
   flex: 1;
   min-height: 240px;
+}
+
+.clock-stage__fullscreen {
+  position: absolute;
+  top: var(--space-3);
+  inset-inline-end: var(--space-3);
+  z-index: 2;
+  color: var(--text-muted);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  opacity: 0;
+  transition:
+    opacity var(--duration) var(--ease-out),
+    background var(--duration) var(--ease-out);
+}
+
+.clock-stage:hover .clock-stage__fullscreen,
+.clock-stage__fullscreen:focus-visible {
+  opacity: 1;
+}
+
+/* ---------- Full-screen clock ---------- */
+.fullscreen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  cursor: none;
+}
+
+.fullscreen.is-active {
+  cursor: default;
+}
+
+.fullscreen .clock {
+  border-radius: 0;
+  border: none;
+}
+
+.fullscreen__status {
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--space-8);
+  display: flex;
+  justify-content: center;
+  gap: var(--space-8);
+  z-index: 1;
+  font-family: var(--font-ui);
+  font-size: clamp(16px, 2.4cqh, 32px);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.fullscreen__controls {
+  position: absolute;
+  top: var(--space-5);
+  inset-inline-end: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-out);
+}
+
+.fullscreen.is-active .fullscreen__controls,
+.fullscreen__controls:focus-within {
+  opacity: 1;
+}
+
+.fullscreen__hint {
+  font-size: var(--text-sm);
+  padding: 6px var(--space-3);
+  border-radius: var(--radius-full);
+  background: rgba(10, 12, 14, 0.55);
+  color: #f1f3f5;
+}
+
+.fullscreen__exit.btn {
+  background: rgba(10, 12, 14, 0.55);
+  color: #f1f3f5;
+}
+
+.fullscreen__exit.btn:hover {
+  background: rgba(10, 12, 14, 0.8);
+  color: #fff;
 }
 
 .overview {

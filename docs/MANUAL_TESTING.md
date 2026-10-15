@@ -18,6 +18,13 @@ Run through this on both Windows 10 and Windows 11, using the installed build (`
 - [ ] Font, text colour, solid background, image background (choose a JPG/PNG), seconds, date and size all apply immediately and survive a restart.
 - [ ] With Windows "Animation effects" turned off (Settings → Accessibility → Visual effects), flip and page animations stop.
 
+## Full-screen clock
+
+- [ ] F11 or the button on the clock (top-right, on hover) fills the whole screen with the clock; the taskbar is hidden.
+- [ ] The next prayer and countdown show at the bottom; a running focus session appears next to it.
+- [ ] Moving the mouse shows the exit button and hint; after a few seconds of rest they and the cursor disappear.
+- [ ] Esc, F11 and the exit button all return to the normal window. Closing to the tray while full screen also leaves full screen.
+
 ## Desktop widget
 
 - [ ] The sidebar's "Desktop widget" button, the tray menu and Settings all show and hide the widget.
